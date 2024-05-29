@@ -5,12 +5,15 @@ import { withRouter } from 'react-router-dom';
 import './index.scss';
 import Header from '../../layouts/Header';
 import PropTypes from 'prop-types';
-import { login, guide, state } from '../../reducers/base';
+import { admin, guide, state } from '../../reducers/base';
+import { connect } from 'react-redux';
+import { generateRandomPassword } from '../../globalLib';
 
 const FormItem = Form.Item;
 
 @withRouter
 @ConfigProvider.config
+@connect(state => ({ ...state.locale }))
 class Register extends React.Component {
   static displayName = 'Register';
 
@@ -55,14 +58,21 @@ class Register extends React.Component {
       if (errors) {
         return;
       }
-      login(values)
+
+      const data = {
+        password: generateRandomPassword(10),
+        ...values
+      };
+
+      admin(data)
         .then(res => {
+          console.log('res', res);
           localStorage.setItem('token', JSON.stringify(res));
-          this.props.history.push('/');
+          // this.props.history.push('/');
         })
         .catch(() => {
           Message.error({
-            content: locale.invalidUsernameOrPassword,
+            content: locale.Login.invalidUsernameOrPassword,
           });
         });
     });
@@ -80,7 +90,8 @@ class Register extends React.Component {
   render() {
     const { locale = {} } = this.props;
     const { consoleUiEnable, guideMsg } = this.state;
-
+    console.log('this.props', this.props);
+console.log('this.props.locale', this.props.locale);
     return (
       <div className="home-page">
         <Header />
@@ -93,7 +104,7 @@ class Register extends React.Component {
         >
           <div className="vertical-middle product-area">
             <img className="product-logo" src="img/nacos.png" />
-            <p className="product-desc">{locale.productDesc}</p>
+            <p className="product-desc">{locale.Login.productDesc}</p>
           </div>
           <div className="animation animation1" />
           <div className="animation animation2" />
@@ -101,44 +112,30 @@ class Register extends React.Component {
           <div className="animation animation4" />
           <div className="animation animation5" />
           <Card className="login-panel" contentHeight="auto">
-            <div className="login-header">{locale.login}</div>
+            <div className="login-header">{locale.Login.initPassword}</div>
             <div className="internal-sys-tip">
-              <div>{locale.internalSysTip1}</div>
-              <div>{locale.internalSysTip2}</div>
+              <div>{locale.Login.internalSysTip1}</div>
+              <div>{locale.Login.internalSysTip2}</div>
             </div>
             {!consoleUiEnable && (
               <Form className="login-form" field={this.field}>
                 <FormItem>
                   <Input
-                    {...this.field.init('username', {
-                      rules: [
-                        {
-                          required: true,
-                          message: locale.usernameRequired,
-                        },
-                      ],
-                    })}
-                    placeholder={locale.pleaseInputUsername}
-                    onKeyDown={this.onKeyDown}
+                    value="nacos"
+                    readOnly
+                    placeholder={locale.Login.pleaseInputUsername}
                   />
                 </FormItem>
                 <FormItem>
                   <Input
                     htmlType="password"
-                    placeholder={locale.pleaseInputPassword}
-                    {...this.field.init('password', {
-                      rules: [
-                        {
-                          required: true,
-                          message: locale.passwordRequired,
-                        },
-                      ],
-                    })}
+                    placeholder={locale.Login.pleaseInputPasswordTips}
+                    {...this.field.init('password', {})}
                     onKeyDown={this.onKeyDown}
                   />
                 </FormItem>
                 <FormItem label=" ">
-                  <Form.Submit onClick={this.handleSubmit}>{locale.submit}</Form.Submit>
+                  <Form.Submit onClick={this.handleSubmit}>{locale.Login.submit}</Form.Submit>
                 </FormItem>
               </Form>
             )}

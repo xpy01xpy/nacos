@@ -19,6 +19,7 @@ import qs from 'qs';
 import { Message } from '@alifd/next';
 import { browserHistory } from 'react-router';
 import { isPlainObject } from './nacosutil';
+import { goRegister } from '../globalLib';
 // import { SUCCESS_RESULT_CODE } from '../constants';
 
 const API_GENERAL_ERROR_MESSAGE = 'Request error, please try again later!';
@@ -44,7 +45,6 @@ const request = () => {
         try {
           token = JSON.parse(localStorage.token);
         } catch (e) {
-          console.log(e);
           goLogin();
         }
         const { accessToken = '', username = '' } = token;
@@ -73,6 +73,11 @@ const request = () => {
       // if (!success && resultCode !== SUCCESS_RESULT_CODE) {
       //   Message.error(resultMessage);
       //   return Promise.reject(new Error(resultMessage));
+      // }
+      // if (response.config.url === 'v1/console/server/state') {
+      //   if (response.data.auth_admin_request && response.data.auth_admin_request === 'true') {
+      //     goRegister();
+      //   }
       // }
       return response.data;
     },
