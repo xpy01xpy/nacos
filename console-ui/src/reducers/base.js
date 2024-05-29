@@ -25,6 +25,7 @@ const initialState = {
   authEnabled: '',
   notice: '',
   consoleUiEnable: '',
+  authAdminRequest: '',
   guideMsg: '',
 };
 
@@ -57,6 +58,7 @@ const getState = () => dispatch =>
           functionMode: res.function_mode,
           loginPageEnabled: res.login_page_enabled,
           authEnabled: res.auth_enabled,
+          authAdminRequest: res.auth_admin_request,
           consoleUiEnable: res.console_ui_enabled,
           startupMode: res.startup_mode,
         },
@@ -72,6 +74,7 @@ const getState = () => dispatch =>
           loginPageEnabled: null,
           authEnabled: null,
           consoleUiEnable: null,
+          authAdminRequest: false,
         },
       });
     });
