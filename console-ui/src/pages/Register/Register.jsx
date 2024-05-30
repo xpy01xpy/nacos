@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Form, Input, Message, ConfigProvider, Field } from '@alifd/next';
+import { Card, Form, Input, Message, ConfigProvider, Field, Dialog } from '@alifd/next';
 import { withRouter } from 'react-router-dom';
 
 import './index.scss';
@@ -66,9 +66,16 @@ class Register extends React.Component {
 
       admin(data)
         .then(res => {
-          console.log('res', res);
-          localStorage.setItem('token', JSON.stringify(res));
-          // this.props.history.push('/');
+          if (res.username && res.password) {
+            Dialog.alert({
+              title: locale.Login.initPassword + locale.ListeningToQuery.success,
+              content: locale.Password.newPassword + '：' + res.password,
+              onOk: () => {
+                localStorage.setItem('token', JSON.stringify(res));
+                this.props.history.push('/');
+              }
+            });
+          }
         })
         .catch(() => {
           Message.error({
@@ -90,8 +97,7 @@ class Register extends React.Component {
   render() {
     const { locale = {} } = this.props;
     const { consoleUiEnable, guideMsg } = this.state;
-    console.log('this.props', this.props);
-console.log('this.props.locale', this.props.locale);
+
     return (
       <div className="home-page">
         <Header />

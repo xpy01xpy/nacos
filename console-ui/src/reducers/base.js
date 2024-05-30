@@ -75,7 +75,7 @@ const getState = () => dispatch =>
           loginPageEnabled: null,
           authEnabled: null,
           consoleUiEnable: null,
-          authAdminRequest: false,
+          authAdminRequest: null,
         },
       });
     });

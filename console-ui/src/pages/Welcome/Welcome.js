@@ -18,15 +18,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { goRegister } from '../../globalLib';
 
 @connect(state => ({ ...state.base }))
 class Welcome extends React.Component {
   static propTypes = {
     functionMode: PropTypes.string,
+    authAdminRequest: PropTypes.string,
   };
 
   render() {
-    const { functionMode } = this.props;
+    const { functionMode, authAdminRequest } = this.props;
+    if (authAdminRequest && authAdminRequest === 'true') {
+      return (
+        <>
+          <Redirect to="/register" />
+        </>
+      );
+    }
     const path = functionMode === 'naming' ? 'serviceManagement' : 'configurationManagement';
     return <>{functionMode !== '' && <Redirect to={`/${path}`} />}</>;
   }
