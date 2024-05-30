@@ -67,11 +67,11 @@ class Register extends React.Component {
       admin(data)
         .then(res => {
           if (res.username && res.password) {
+            localStorage.setItem('token', JSON.stringify(res));
             Dialog.alert({
               title: locale.Login.initPassword + locale.ListeningToQuery.success,
               content: locale.Password.newPassword + '：' + res.password,
               onOk: () => {
-                localStorage.setItem('token', JSON.stringify(res));
                 this.props.history.push('/');
               }
             });
